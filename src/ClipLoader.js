@@ -3,24 +3,20 @@ var assign = require('domkit/appendVendorPrefix');
 var insertKeyframesRule = require('domkit/insertKeyframesRule');
 
 /**
- * @type {Object}
+ * @return {Object}
  */
-var keyframes = {
+var getKeyFrames = function(scale = 0.8) {
+	return {
     '0%': {
         transform: 'rotate(0deg) scale(1)'
     },
     '50%': {
-        transform: 'rotate(180deg) scale(0.8)'
+        transform: `rotate(180deg) scale(${scale})`
     },
     '100%': {
         transform: 'rotate(360deg) scale(1)'
     }
 };
-
-/**
- * @type {String}
- */
-var animationName = insertKeyframesRule(keyframes);
 
 var Loader = React.createClass({
     /**
@@ -29,7 +25,8 @@ var Loader = React.createClass({
     propTypes: {
         loading: React.PropTypes.bool,
         color: React.PropTypes.string,
-        size: React.PropTypes.string
+        size: React.PropTypes.string,
+        scale: React.PropTypes.number
     },
 
     /**
@@ -64,6 +61,7 @@ var Loader = React.createClass({
      * @return {Object}
      */
     getAnimationStyle: function(i) {
+        var animationName = insertKeyframesRule(getKeyFrames(this.props.scale));
         var animation = [animationName, '0.75s', '0s', 'infinite', 'linear'].join(' ');
         var animationFillMode = 'both';
 
